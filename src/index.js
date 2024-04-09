@@ -22,8 +22,12 @@ function processCommands(commands) {
   commands.forEach(command => {
     if (command.action === "createFrame") {
       let element = createFrame(parseFloat(command.width) || 0, parseFloat(command.height) || 0);
-      figma.currentPage.appendChild(element);
-      frameOffset++;
+      // Установка родителя для фрейма, если указан parentId
+      if (command.parentId && framesById[command.parentId]) {
+        framesById[command.parentId].appendChild(element);
+      } else {
+        figma.currentPage.appendChild(element);
+      }
       framesById[command.id] = element;
     }
   });
@@ -37,11 +41,10 @@ function processCommands(commands) {
         createFrameWithAutoLayout(element, command.layoutMode, command.primaryAxisAlignItems, command.counterAxisAlignItems);
       }
       
-      if (command.parentId) {
+      // Применение align теперь происходит только если есть parentId, что логично, так как выравнивание предполагает наличие родителя
+      if (command.parentId && framesById[command.parentId]) {
         let parent = framesById[command.parentId];
-        if (parent && command.alignment) {
-          align(element, parent, command.alignment);
-        }
+        align(element, parent, command.alignment);
       }
     }
   });
