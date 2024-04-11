@@ -33,10 +33,10 @@ function processCommands(commands) {
           addFrame(command.id, element);
         }
         break;
-      case "applyAutoLayout": // Новый case для обработки применения автолайаута
+      case "applyAutoLayout":
         element = getFrameById(command.id);
         if (element && command.layoutMode) {
-          createFrameWithAutoLayout(element, command.layoutMode);
+          createFrameWithAutoLayout(element, command.layoutMode, command.alignX, command.alignY);
         }
         break;
     }
