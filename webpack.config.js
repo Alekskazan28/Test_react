@@ -1,4 +1,5 @@
 const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   // Точка входа в приложение
@@ -6,7 +7,7 @@ module.exports = {
   // Конфигурация выходного файла
   output: {
     filename: 'bundle.js',
-    // Указываем папку dist в корне проекта для собранного файла
+    // Указываем папку public в корне проекта для собранного файла
     path: path.resolve(__dirname, 'public'),
   },
   module: {
@@ -23,12 +24,12 @@ module.exports = {
           }
         }
       },
-      // Добавляем загрузчик для CSS файлов, если нужно
+      // Добавляем загрузчик для CSS файлов
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
-      // Добавляем загрузчик для изображений, если ваш UI использует изображения
+      // Добавляем загрузчик для изображений
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
@@ -40,8 +41,15 @@ module.exports = {
     extensions: ['.js', '.jsx'],
   },
   // Настройка для разработки
-  // Если вы собираете продакшн версию, можете использовать 'production'
   mode: 'development',
   // Добавляем source map для удобства отладки
   devtool: 'inline-source-map',
+  // Добавляем plugins для расширения функциональности
+  plugins: [
+    // Плагин для очистки директории public перед каждой сборкой
+    new CleanWebpackPlugin({
+      cleanStaleWebpackAssets: false,
+      cleanOnceBeforeBuildPatterns: ['**/*', '!index.html', '!manifest.json'], // Исключаем index.html и manifest.json из очистки
+    }),
+  ],
 };
