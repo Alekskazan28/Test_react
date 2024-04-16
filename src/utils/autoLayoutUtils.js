@@ -1,39 +1,21 @@
-// Экспортируем функции для работы с auto layout в Figma
-export function createFrame(width, height) {
-  // Создаем фрейм и устанавливаем его размеры
-  const frame = figma.createFrame();
-  frame.resize(width, height);
-  return frame;
-}
-
-export function createFrameWithAutoLayout(frame, layoutMode = 'NONE', primaryAxisAlignItems = 'CENTER', counterAxisAlignItems = 'CENTER') {
-  // Настройка автоматического выравнивания для фрейма
+export function createFrameWithAutoLayout(frame, layoutMode = 'NONE', alignX = 'CENTER', alignY = 'CENTER', primaryAxisSizingMode = 'AUTO', counterAxisSizingMode = 'AUTO') {
   frame.layoutMode = layoutMode;
-  frame.primaryAxisAlignItems = primaryAxisAlignItems;
-  frame.counterAxisAlignItems = counterAxisAlignItems;
-  frame.layoutAlign = 'STRETCH'; // Вытягиваем фрейм, чтобы он занимал всю доступную ширину в родителе
-}
+  frame.primaryAxisSizingMode = primaryAxisSizingMode;
+  frame.counterAxisSizingMode = counterAxisSizingMode;
+  frame.layoutAlign = 'STRETCH';
 
-export function align(element, parent, alignment) {
-  // Выравнивание элемента относительно его родителя
-  switch (alignment) {
-    case 'center':
-      // Центрирование элемента по обеим осям
-      element.x = (parent.width - element.width) / 2;
-      element.y = (parent.height - element.height) / 2;
+  switch (layoutMode) {
+    case 'HORIZONTAL':
+      frame.primaryAxisAlignItems = alignX;
+      frame.counterAxisAlignItems = alignY;
+      frame.itemSpacing = 10;
       break;
-    case 'left':
-      // Выравнивание элемента по левому краю родителя
-      element.x = 0;
+    case 'VERTICAL':
+      frame.primaryAxisAlignItems = alignY;
+      frame.counterAxisAlignItems = alignX;
+      frame.itemSpacing = 10;
       break;
-    case 'right':
-      // Выравнивание элемента по правому краю родителя
-      element.x = parent.width - element.width;
-      break;
-    // Можно добавить дополнительные кейсы выравнивания по мере необходимости
-    default:
+    case 'NONE':
       break;
   }
-  // Добавляем элемент к его родителю
-  parent.appendChild
 }
